@@ -1,6 +1,4 @@
-import time
 S = input()
-start = time.time()
 Slen = len(S)
 result = int(S[0])
 
@@ -13,6 +11,4 @@ else:
             result += n
         else:
             result *= n
-end = time.time()
 print(result)
-print(end - start)
