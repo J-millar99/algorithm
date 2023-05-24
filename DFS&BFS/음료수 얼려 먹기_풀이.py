@@ -8,7 +8,7 @@ for i in range(n):
 cnt = 0
 
 def ice(dm, i, j):
-    dm[i][j] = 2
+    dm[i][j] = 1
     if j < m - 1 and dm[i][j + 1] == 0:
         ice(dm, i, j + 1)
     if i < n - 1 and dm[i + 1][j] == 0:
