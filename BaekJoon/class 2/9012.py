@@ -1,3 +1,4 @@
+# 괄호
 n = int(input())
 ret = []
 

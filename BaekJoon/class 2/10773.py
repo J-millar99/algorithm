@@ -1,3 +1,4 @@
+# 제로
 n = int(input())
 stack = []
 

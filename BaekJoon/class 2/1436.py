@@ -1,3 +1,4 @@
+# 영화감독 숌
 n = int(input())
 base = 666
 ret = [base]

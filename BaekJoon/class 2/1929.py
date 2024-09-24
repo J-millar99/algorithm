@@ -1,3 +1,4 @@
+# 소수 구하기
 import math
 def isPrime(num):
     if num == 1:

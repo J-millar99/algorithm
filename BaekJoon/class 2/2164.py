@@ -1,3 +1,4 @@
+# 카드2
 import queue
 n = int(input())
 q = queue.Queue()

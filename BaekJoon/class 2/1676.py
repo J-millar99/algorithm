@@ -1,3 +1,4 @@
+# 팩토리얼 0의 개수
 def factorial(num):
     if num <= 1:
         return 1

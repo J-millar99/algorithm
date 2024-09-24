@@ -1,3 +1,4 @@
+# 설탕 배달
 n = int(input())
 data = []
 
