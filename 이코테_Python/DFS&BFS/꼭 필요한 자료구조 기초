@@ -1,0 +1,13 @@
+Data Structure(Stack, queue)
+
+Stack :
+    append : 데이터 삽입 - Overflow(데이터 size + 1)
+    pop : 데이터 삭제 - Underflow(데이터 -1)
+
+* 파이썬에서는 별도의 라이브러리를 사용할 필요 없이, 리스트가 곧 스택이다.
+
+Queue :
+    append : 데이터 삽입
+    popleft : 데이터 삭제
+
+* 파이썬에서는 queue보다 deque을 사용하는 것이 더 좋다.
