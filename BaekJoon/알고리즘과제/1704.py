@@ -1,38 +1,26 @@
-# Z
+def z_order(size, r, c):
+    Z = 0
+    n = 2 ** size
 
-# 입력 선언
-import sys, math
-input = sys.stdin.readline
+    def _recurse(n, x, y):
+        nonlocal Z
+        if n == 1:
+            return Z
 
-# 입력 받기
-size, r, c = map(int, input().rstrip().split())
-matrix = [[0 for i in range(2 ** size)] for _ in range(2 ** size)]
+        n //= 2
+        if r < x + n and c < y + n:
+            return _recurse(n, x, y)  # Top-left
+        elif r < x + n and c >= y + n:
+            Z += n * n
+            return _recurse(n, x, y + n)  # Top-right
+        elif r >= x + n and c < y + n:
+            Z += 2 * n * n
+            return _recurse(n, x + n, y)  # Bottom-left
+        else:
+            Z += 3 * n * n
+            return _recurse(n, x + n, y + n)  # Bottom-right
 
-def _degenerateCase(_matrix):
-    if len(_matrix) == 2:
-        return True   
-    return False
+    return _recurse(n, 0, 0)
 
-def _split(_matrix):
-    n = len(_matrix)
-    div = n // 2
-    _submatrices = []
-
-    for i in range(0, n, div):
-        for j in range(0, n, div):
-            _submatrix = [row[j:j+div] for row in _matrix[i:i+div]]
-            _submatrices.append(_submatrix)
-    return _submatrices
-Z = 0
-def _divide(_matrix):
-    global Z
-    if _degenerateCase(_matrix):
-        Z += 1
-        return
-    else:
-        submatrices = _split(_matrix)
-        for submatrix in submatrices:
-            _divide(submatrix)
-
-_divide(matrix)
-print(Z)
+size, r, c = map(int, input().split())
+print(z_order(size, r, c))
