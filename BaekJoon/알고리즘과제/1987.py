@@ -1,27 +1,32 @@
+# 비재귀 dfs
 from collections import deque
+import sys
+input = sys.stdin.readline
 
-def dfs(x, y, step):
-    if x < 0 or x >= row or y < 0 or y >= col:
-        steps.append(step)
-        for _ in range(step):
-            _deque.pop()
-        return False
-    alpha = _matrix[x][y]
-    if not alpha in _deque:
-        _deque.append(alpha)
-        dfs(x - 1, y, step + 1)
-        dfs(x + 1, y, step + 1)
-        dfs(x, y + 1, step + 1)
-        dfs(x, y - 1, step + 1)
-        return True
-    return False
+def bfs():
+    # 큐에 초기 상태 (좌표 x, 좌표 y, 현재까지 이동한 칸 수 count, 방문한 알파벳 상태 visited)를 넣음
+    queue = deque([(0, 0, 1, 1 << (ord(_matrix[0][0]) - ord('A')))])
+    max_count = 1
 
-row, col = map(int, input().split())
-_matrix = []
-for _ in range(row):
-    _matrix.append(list(input()))
+    while queue:
+        x, y, count, visited = queue.popleft()
+        max_count = max(max_count, count)
+        
+        # 네 방향으로 이동
+        for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+            nx, ny = x + dx, y + dy
+            if 0 <= nx < row and 0 <= ny < col:
+                next_alpha = ord(_matrix[nx][ny]) - ord('A')
+                # 새로운 알파벳을 아직 방문하지 않았을 때
+                if not (visited & (1 << next_alpha)):
+                    # 큐에 새로운 상태를 추가
+                    queue.append((nx, ny, count + 1, visited | (1 << next_alpha)))
 
-steps = []
-_deque = deque()
-dfs(0, 0, 1)
-print(steps)
+    return max_count
+
+# 입력 처리
+row, col = map(int, input().rstrip().split())
+_matrix = [list(input().rstrip()) for _ in range(row)]
+
+# BFS로 최대 이동 칸 수 계산
+print(bfs())
