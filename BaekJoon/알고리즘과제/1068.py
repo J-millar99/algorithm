@@ -1,3 +1,4 @@
+# 트리
 def dfs(matrix, v, visited):
     global count
     visited[v] = True

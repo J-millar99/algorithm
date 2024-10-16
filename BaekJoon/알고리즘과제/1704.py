@@ -1,3 +1,4 @@
+# Z
 def z_order(size, r, c):
     Z = 0
     n = 2 ** size
