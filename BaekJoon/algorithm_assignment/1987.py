@@ -1,5 +1,5 @@
 # 알파벳
-# 비재귀 dfs
+# 비재귀 bfs
 from collections import deque
 import sys
 input = sys.stdin.readline
