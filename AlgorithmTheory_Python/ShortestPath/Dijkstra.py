@@ -53,6 +53,7 @@ def dijkstra(start):
     # 시작 노드에 대해서 초기화
     distance[start] = 0
     visited[start] = True
+    # j는 목적지와 비용의 튜플
     for j in graph[start]:
         distance[j[0]] = j[1]
     # 시작 노드를 제외한 전체 n - 1개의 노드에 대해 반복
