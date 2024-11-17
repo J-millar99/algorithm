@@ -3,52 +3,62 @@ import sys
 input = sys.stdin.readline
 n, m, b = map(int, input().split())
 
-graph = []
-# 바닥과 천장
-floor, ceil = 257, -1
+time = 0
+graph = {}
 for _ in range(n):
-    temp = list(map(int, input().split()))
-    graph.append(temp)
-
-# 최대 높이 블럭
-ceil = max(max(row) for row in graph)
-floor = min(min(row) for row in graph)
-             
-time = 0   
-while True:
-    # 평평한지 확인
-    if ceil == floor:
-        break
-    # 바닥 쌓기가 가능한지 확인
-    pile, dig = [], []
-    for i in range(n):
-        for j in range(m):
-            if graph[i][j] == floor:
-                pile.append((i, j))
-            elif graph[i][j] == ceil:
-                dig.append((i, j))
-    p = len(pile)
-    q = len(dig)
-    if b >= p:
-        # 쌓아야 함
-        if p < 2 * q:
-            for x, y in pile:
-                graph[x][y] += 1
-            b -= p
-            floor += 1
-            time += p
-        # 파야함
+    line = list(map(int, input().split()))
+    for l in line:
+        if l in graph:
+            graph[l] += 1
         else:
-            for x, y in dig:
-                graph[x][y] -= 1
-            ceil -= 1
-            b += q
-            time += 2 * q
+            graph[l] = 1
+def check():
+    floor = graph.keys()
+    top = max(floor)
+    bottom = min(floor)
+    return top, bottom
+    
+while len(graph) != 1:
+    # 현재 상태 확인
+    top, bottom = check()
+    # 시간이 더 적게 드는 방법을 택함 쌓는 시간과 파는 시간이 동일하다면 최대 높이를 만드는 쌓기를 택함
+    if graph[top] * 2 >= graph[bottom]:
+        # 쌓는게 가능하다면
+        if b >= graph[bottom]:
+            if bottom + 1 in graph:
+                graph[bottom + 1] += graph[bottom]
+            else:
+                graph[bottom + 1] = graph[bottom]
+            # 쌓은만큼 블럭 감소
+            b -= graph[bottom]
+            # 시간 누적
+            time += graph[bottom]
+            # 최하단 층 갱신
+            del graph[bottom]
+        else:
+            # 불가능하면 파기
+            if top - 1 in graph:
+                graph[top - 1] += graph[top]
+            else:
+                graph[top - 1] = graph[top]
+            # 판 만큼 블럭 추가
+            b += graph[top]
+            # 시간 누적
+            time += (graph[top] * 2)
+            # 최상단 층 갱신
+            del graph[top]
+            # 파는게 빠르다면
     else:
-        for x, y in dig:
-            graph[x][y] -= 1
-        b += q
-        ceil -= 1
-        time += 2 * q 
-        
-print(time, ceil, sep=" ")
+        # 불가능하면 파기
+        if top - 1 in graph:
+            graph[top - 1] += graph[top]
+        else:
+            graph[top - 1] = graph[top]
+        # 판 만큼 블럭 추가
+        b += graph[top]
+        # 시간 누적
+        time += (graph[top] * 2)
+        # 최상단 층 갱신
+        del graph[top]
+    
+print(time, max(graph.keys()), sep=" ")
