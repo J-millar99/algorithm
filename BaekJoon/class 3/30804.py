@@ -1,58 +1,31 @@
 # 과일 탕후루
+import sys
+input = sys.stdin.readline
+
 n = int(input())
-data = list(map(int, input().split()))
+fruit = list(map(int, input().split()))
 
-def RightFirst():
-    s = n // 2 - 1
-    e = n // 2
-    # 과일 종류 집합
-    _set = set()
-    _set.add(data[s])
-    _set.add(data[e])
-    flag = True
-    while len(_set) <= 2 and e < n - 1:
-        e += 1
-        _set.add(data[e])
-    if len(_set) == 3:
-        e -= 1
-        flag = False
-        
-    while len(_set) <= 2 and 0 < s:
-        s -= 1
-        _set.add(data[s])
-    if len(_set) == 3 and flag:
-        s += 1
-
-    if len(_set) == 1:
-        return e - s + 1
-    return e - s + 1
-        
-def LeftFirst():
-    s = n // 2 - 1
-    e = n // 2
-    # 과일 종류 집합
-    _set = set()
-    _set.add(data[s])
-    _set.add(data[e])
-    flag = True
-    while len(_set) <= 2 and 0 < s:
-        s -= 1
-        _set.add(data[s])
-    if len(_set) == 3:
-        s += 1
-        flag = False
-
-    while len(_set) <= 2 and e < n - 1:
-        e += 1
-        _set.add(data[e])
-    if len(_set) == 3 and flag:
-        e -= 1
-
-    if len(_set) == 1:
-        return e - s + 1
-    return e - s + 1
-
-if n == 1:
-    print(n)
-else:
-    print(max(RightFirst(), LeftFirst()))
+def ConsistOf():
+    # 투 포인터 선언
+    left, right = 0, 0
+    # 최대 과일 개수
+    max_fruit = 0
+    # 과일 등록
+    fruit_dict = {}
+    # rptr이 끝에 도달할 때까지
+    while right < n:
+        # 오른쪽으로 이동하면서 해당 과일이 사전에 있다면 개수 추가
+        if fruit[right] in fruit_dict:
+            fruit_dict[fruit[right]] += 1
+        else:
+            fruit_dict[fruit[right]] = 1
+        # 과일 종류가 2개라면 left에 있는 반복되는 과일을 모두 제거
+        while len(fruit_dict) > 2:
+            fruit_dict[fruit[left]] -= 1
+            if fruit_dict[fruit[left]] == 0:
+                del fruit_dict[fruit[left]]
+            left += 1
+        max_fruit = max(max_fruit, right - left + 1)
+        right += 1
+    return (max_fruit)
+print(ConsistOf())
