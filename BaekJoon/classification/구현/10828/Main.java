@@ -36,5 +36,6 @@ public class Main {
                     System.out.println(stack.peek());        
             }
         }
+        br.close();
     }
 }
