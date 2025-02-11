@@ -7,7 +7,6 @@ public class Main {
         return a > b ? b : a;
     }
 
-    public static void 
 
     public static void dpf(int dp[], int n) {
         if (dp[n] != 0)
@@ -24,5 +23,6 @@ public class Main {
         dp[3] = 1;
         dpf(dp, n);
         System.out.println(dp[n]);
+        br.close();
     }
 }

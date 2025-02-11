@@ -23,5 +23,6 @@ public class Main {
             k %= list.get(i);
         }
         System.out.println(result);
+        br.close();
     }    
 }

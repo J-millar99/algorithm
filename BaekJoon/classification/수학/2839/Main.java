@@ -24,5 +24,6 @@ public class Main {
 
         func(sugar);
         System.out.println(result);
+        br.close();
     }
 }
