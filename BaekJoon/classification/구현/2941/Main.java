@@ -22,6 +22,7 @@ public class Main {
         input = input.replace(" ", "");
         count += input.length();
         System.out.println(count);
+        br.close();
     }
 
     public static void makeDictionary() {
