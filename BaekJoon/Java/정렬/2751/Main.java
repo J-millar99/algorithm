@@ -17,6 +17,6 @@ public class Main {
         for (int num : al)
             sb.append(num).append("\n");
         System.out.print(sb);
-        br.close();a
+        br.close();
     }
 }

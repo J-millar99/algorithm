@@ -20,7 +20,7 @@ public class Main {
             arr.add(pair);
         }
         
-        arr.sort(Comparator.comparing((Pair p) -> p.x).thenComparing(p -> p.y));
+        arr.sort(Comparator.comparing((Pair p) -> p.x).thenComparing(p -> p.y)); // 두 가지 기준 정렬
         StringBuilder sb = new StringBuilder();
         for (Pair pair : arr)
             sb.append(pair.x).append(" ").append(pair.y).append("\n");

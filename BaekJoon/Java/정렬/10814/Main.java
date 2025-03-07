@@ -21,7 +21,7 @@ public class Main {
             arr.add(pair);
         }
         
-        arr.sort(Comparator.comparing((Pair p) -> p.age));
+        arr.sort(Comparator.comparing((Pair p) -> p.age)); // 페어에서 특정 요소르 기준으로 정렬
         StringBuilder sb = new StringBuilder();
         for (Pair pair : arr)
             sb.append(pair.age).append(" ").append(pair.name).append("\n");
