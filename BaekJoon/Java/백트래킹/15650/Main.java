@@ -5,36 +5,31 @@ import java.io.InputStreamReader;
 public class Main {
     static StringBuilder sb = new StringBuilder();
     static int n, m;
+    static int[] node;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         String[] input = br.readLine().split(" ");
         n = Integer.parseInt(input[0]);
         m = Integer.parseInt(input[1]);
-        boolean[] visit = new boolean[n];
-        int[] node = new int[m];
+        node = new int[m + 1];
 
-        backTracking(node, visit, 0);
+        backTracking(1, 1);
         System.out.print(sb);
         br.close();
     }
 
-    public static void backTracking(int[] node, boolean[] visit, int k) {
-        if (k == m) {
-            int i;
-            for (i = 0; i < m; i++)
+    public static void backTracking(int start, int depth) {
+        if (depth == m + 1) {
+            for (int i = 1; i <= m; i++)
                 sb.append(node[i]).append(" ");
             sb.append("\n");
             return;
         }
 
-        for (int i = 0; i < n; i++) {
-            if (visit[i] == false) {
-                node[k] = i + 1;
-                visit[i] = true;
-                backTracking(node, visit, k + 1);
-                visit[i] = false;
-            }
+        for (int i = start; i <= n; i++) {
+            node[depth] = i;
+            backTracking(i + 1, depth + 1);
         }
     }
 }
