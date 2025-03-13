@@ -15,26 +15,16 @@ public class Main {
         solution();
         br.close();
     }
-
     public static void solution() {
         int[] dp = new int[n + 1];
         dp[1] = num[1];
-        for (int i = 2; i <= n; i++)
-            dp[i] = num[i - 1] + findMax(dp, i - 1, num[i]);
-
-        int max = 0;
-        for (int i = n; i > 0; i--) {
-            if (dp[i] > max)
-                max = dp[i];
+        int maxValue = dp[1];
+        for (int i = 2; i <= n; i++) {
+            dp[i] = num[i];
+            if (dp[i - 1] > 0)
+                dp[i] += dp[i - 1];
+            maxValue = Math.max(maxValue, dp[i]);
         }
-        System.out.println(max);
-    }
-
-    public static int findMax(int[] dp, int prev, int target) {
-        int max = 0;
-        for (int i = prev; i >= 0; i--)
-            if (target > num[i])
-                max = Math.max(max, dp[i]);
-        return max;
+        System.out.println(maxValue);
     }
 }
