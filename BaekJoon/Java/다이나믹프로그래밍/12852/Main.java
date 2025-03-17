@@ -10,35 +10,66 @@ public class Main {
 
     public static void solution(int num) {
         int[] dp = new int[num + 1];
+        int[] prev = new int[num + 1];
         StringBuilder sb = new StringBuilder();
 
         dp[1] = 0;
+        prev[1] = 0;
         for (int i = 2; i <= num; i++) {
             dp[i] = dp[i - 1] + 1;
-            if (i % 2 == 0)
+            prev[i] = i - 1;
+            if (i % 2 == 0) {
                 dp[i] = Math.min(dp[i], dp[i / 2] + 1);
-            if (i % 3 == 0) 
+                if (dp[i] == dp[i / 2] + 1)
+                    prev[i] = i / 2;
+            }
+            if (i % 3 == 0) {
                 dp[i] = Math.min(dp[i], dp[i / 3] + 1);
+                if (dp[i] == dp[i / 3] + 1)
+                    prev[i] = i / 3;
+            }
         }
         sb.append(dp[num]).append("\n");
-
-        int temp = num;
-        sb.append(temp).append(" ");
-        while (temp > 1) {
-            int next = temp - 1;
-            int minDp = dp[next];
-
-            if (temp % 3 == 0 && dp[temp / 3] <= minDp) {
-                next = temp / 3;
-                minDp = dp[next];
-            }
-            if (temp % 2 == 0 && dp[temp / 2] <= minDp) {
-                next = temp / 2;
-                minDp = dp[next];
-            }
-            temp = next;
-            sb.append(temp).append(" ");
+        int key = num;
+        while (key != 1) {
+            sb.append(key).append(" ");
+            key = prev[key];
         }
-        System.out.println(sb);
+        sb.append(key).append("\n");
+        System.out.print(sb);
     }
+
+    // public static void solution(int num) {
+    //     int[] dp = new int[num + 1];
+    //     StringBuilder sb = new StringBuilder();
+
+    //     dp[1] = 0;
+    //     for (int i = 2; i <= num; i++) {
+    //         dp[i] = dp[i - 1] + 1;
+    //         if (i % 2 == 0)
+    //             dp[i] = Math.min(dp[i], dp[i / 2] + 1);
+    //         if (i % 3 == 0) 
+    //             dp[i] = Math.min(dp[i], dp[i / 3] + 1);
+    //     }
+    //     sb.append(dp[num]).append("\n");
+
+    //     int temp = num;
+    //     sb.append(temp).append(" ");
+    //     while (temp > 1) {
+    //         int next = temp - 1;
+    //         int minDp = dp[next];
+
+    //         if (temp % 3 == 0 && dp[temp / 3] <= minDp) {
+    //             next = temp / 3;
+    //             minDp = dp[next];
+    //         }
+    //         if (temp % 2 == 0 && dp[temp / 2] <= minDp) {
+    //             next = temp / 2;
+    //             minDp = dp[next];
+    //         }
+    //         temp = next;
+    //         sb.append(temp).append(" ");
+    //     }
+    //     System.out.println(sb);
+    // }
 }

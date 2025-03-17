@@ -24,7 +24,7 @@ public class Main {
         }
 
         for (int i = 1; i <= num; i++) {
-            if (binarySearch(card[i], arr) != -1)
+            if (binarySearch(card[i], arr) == true)
                 sb.append(dic.get(card[i]));
             else
                 sb.append("0");
@@ -35,19 +35,19 @@ public class Main {
         br.close();
     }
 
-    public static int binarySearch(int find, List<Integer> arr) {
+    public static boolean binarySearch(int find, List<Integer> arr) {
         int s = 0;
         int e = arr.size() - 1;
         while (s <= e) {
             int mid = (s + e) / 2;
             int target = arr.get(mid);
             if (target == find)
-                return find;
+                return true;
             else if (target < find) 
                 s = mid + 1;
             else
                 e = mid - 1;
         }
-        return -1;
+        return false;
     }
 }
