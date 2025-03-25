@@ -30,12 +30,14 @@ public class Main {
             }
         }
         sb.append(dp[num]).append("\n");
-        int key = num;
-        while (key != 1) {
-            sb.append(key).append(" ");
-            key = prev[key];
+
+        // 경로 복원
+        int key = num; // 출발 수 num부터
+        while (key != 1) { // 1로 만들어질때까지
+            sb.append(key).append(" "); // 키를 출력하고
+            key = prev[key]; // 그 키가 어디서 왔는지 소스 키를 저장
         }
-        sb.append(key).append("\n");
+        sb.append(key).append("\n"); // 마지막 1까지 저장장
         System.out.print(sb);
     }
 
