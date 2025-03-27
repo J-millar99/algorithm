@@ -5,6 +5,7 @@ import java.util.*;
 public class Main {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static StringBuilder sb = new StringBuilder();
+    static List<List<Edge>> graph;
 
     // 그래프의 간선 정보를 저장하는 내부 클래스
     private static class Edge implements Comparable<Edge> {
@@ -22,14 +23,12 @@ public class Main {
         }
     }
 
-    public static int[] dijkstra(List<List<Edge>> graph, int start) {
-        int vertices = graph.size();
-
+    public static int dijkstra(int start, int end) {
         // 최단 거리를 저장할 배열 (무한대로 초기화)
-        int[] distances = new int[vertices];
+        int[] distances = new int[graph.size() + 1];
         Arrays.fill(distances, Integer.MAX_VALUE);
         distances[start] = 0;
-
+        
         PriorityQueue<Edge> pq = new PriorityQueue<>();
         pq.offer(new Edge(start, 0));
 
@@ -53,17 +52,16 @@ public class Main {
                 }
             }
         }
-        return distances;
+        return distances[end];
     }
     
-    static int v1, v2;
     public static void main(String[] args) throws IOException {
         String[] in = br.readLine().split(" ");
         int n = Integer.parseInt(in[0]);
         int m = Integer.parseInt(in[1]);
 
-        List<List<Edge>> graph = new ArrayList<>();
-        for (int i = 0; i < n; i++) {
+        graph = new ArrayList<>();
+        for (int i = 0; i <= n; i++) { // 인덱스 1번부터 사용하기 위함
             graph.add(new ArrayList<>());
         }
 
@@ -74,13 +72,40 @@ public class Main {
             end = Integer.parseInt(in[1]);
             weight = Integer.parseInt(in[2]);
 
-            graph.get(start - 1).add(new Edge(end - 1, weight));
+            graph.get(start).add(new Edge(end, weight));
+            graph.get(end).add(new Edge(start, weight));
         }
 
+        int v1, v2;
         in = br.readLine().split(" ");
         v1 = Integer.parseInt(in[0]);
         v2 = Integer.parseInt(in[1]);
-        int[] distances = dijkstra(graph, 0);
+
+        int first1 = dijkstra(1, v1);
+        int last1 = dijkstra(v2, n);
+        int essential = dijkstra(v1, v2);
+        int first2 = dijkstra(1, v2);
+        int last2 = dijkstra(v1, n);
+
+        int case1 = 0, case2 = 0;
+        if (first1 == Integer.MAX_VALUE || essential == Integer.MAX_VALUE || last1 == Integer.MAX_VALUE)
+            case1 = -1;
+        else
+            case1 = first1 + essential + last1;
+        
+        if (first2 == Integer.MAX_VALUE || essential == Integer.MAX_VALUE || last2 == Integer.MAX_VALUE)
+            case2 = -1;
+        else
+            case2 = first2 + essential + last2;
+
+        if (case1 == -1 && case2 == -1)
+            System.out.println("-1");
+        else if (case1 == -1)
+            System.out.println(case2);
+        else if (case2 == -1)
+            System.out.println(case1);
+        else
+            System.out.println(Math.min(case1, case2));
         br.close();
     }
 }
