@@ -32,7 +32,10 @@ public class Main {
     }
 
     public static int getRate(int x, int y) {
+        // 소수점 3자리 이하 손실, 그러나 정수 연산만 하므로 정확도 보장
         int result = (int) ((long) y * 100 / x);
+        // 소수점을 손실하지 않지만 정확도에 오차가 존재
+        // int result = (int) (((double) y / (double) x) * 100);
         return result;
     }
 }
