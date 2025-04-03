@@ -1,5 +1,4 @@
 import java.io.*;
-import java.util.*;
 
 public class Main {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -20,37 +19,23 @@ public class Main {
 
             // 맞춰야하는 가격
             int price = Integer.parseInt(br.readLine());
-
-            sb.append(solution(num, coins, price)).append("\n");
+            solution(num, coins, price);
         }
         System.out.print(sb);
         br.close();
     }
 
-    public static int solution(int num, int[] coins, int price) {
-        int[] dp = new int[num + 1];
-
-        for (int i = 1; i <= price; i++) {
-            if (binarySearch(coins, i))
-                dp[i]++;
+    public static void solution(int num, int[] coins, int price) {
+        int[] dp = new int[price + 1];
+        for (int i = 0; i < num; i++) {
+            int coin = coins[i];
+            if (coin > price)
+                continue;
+            dp[coin] += 1;
+            for (int j = coin; j <= price; j++) {
+                dp[j] += dp[j - coin];
+            }
         }
-        return dp[price];
-    }
-
-    public static boolean binarySearch(int[] arr, int find) {
-        int s = 0;
-        int e = arr.length - 1;
-
-        while (s <= e) {
-            int m = (s + e) / 2;
-            int target = arr[m];
-            if (target == find)
-                return true;
-            else if (target > find)
-                e = m - 1;
-            else
-                s = m + 1;
-        }
-        return false;
+        sb.append(dp[price]).append("\n");
     }
 }
