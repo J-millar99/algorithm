@@ -1,0 +1,30 @@
+9
+ABCABC
+ABCABC
+ABCAB
+ABCABCA
+ABCABD
+ABCABB
+A
+ABC
+CBACBA
+
+-> 6
+
+diffword = 1
+6
+ABCABC
+ABCAD
+ABCABD
+ABCABCD
+ABCABDD
+
+diffcount = 2
+diffcount = 1
+
+
+diffword = 0
+3
+ABCABC
+ABCAB
+ABCABCC
