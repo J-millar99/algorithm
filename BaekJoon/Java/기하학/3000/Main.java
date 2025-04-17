@@ -25,6 +25,7 @@ public class Main {
             long countx = arrx[px[i]];
             long county = arry[py[i]];
             if (countx > 1 && county > 1)
+                // 1을 빼주는 이유는 직각에 해당하는 px[i], py[i]를 제외하고 x축에서 1개 y축에서 한 개 뽑아야 하기 때문이다
                 count += (countx - 1) * (county - 1);
         }
         System.out.println(count);
