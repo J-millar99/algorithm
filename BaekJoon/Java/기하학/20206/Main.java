@@ -22,48 +22,37 @@ public class Main {
     }
 
     public static String solution(int[] pos, int[] square) {
-        int a = pos[0];
-        int b = pos[1];
-        int c = pos[2];
-
+        int A = pos[0];
+        int B = pos[1];
+        int C = pos[2];
+        
         int x1 = square[0], x2 = square[1];
         int y1 = square[2], y2 = square[3];
-
-        if (a == 0) { // x축에 평행
-            if (b < 0)
-                c = -c;
-            if (y1 < c && c < y2)
-                return "Poor";
-            return "Lucky";
-        } else if (b == 0) { // y축에 수직
-            if (a < 0)
-                c = -c;
-            if (x1 < c && c < x2)
-                return "Poor";
-            return "Lucky";
-        }
-        // 기울기가 음수
-        if (a * b > 0) {
-            int v1 = (a * x1 + b * y1);
-            int v2 = (a * x2 + b * y2);
-            v1 = -v1;
-            v2 = -v2;
-            int max = Math.max(v1, v2);
-            int min = Math.min(v1, v2);
-            if (min < c && c < max)
-                return "Poor";
-        }
-        // 기울기가 양수
-        else if (a * b < 0) {
-            int v1 = (a * x2 + b * y1);
-            int v2 = (a * x1 + b * y2);
-            v1 = -v1;
-            v2 = -v2;
-            int max = Math.max(v1, v2);
-            int min = Math.min(v1, v2);
-            if (min < c && c < max)
-                return "Poor";
-        }
-        return "Lucky";
+        
+        // 사각형의 네 꼭짓점에 대해 직선 방정식의 값 계산
+        long v1 = (long)A * x1 + (long)B * y1 + C;
+        long v2 = (long)A * x1 + (long)B * y2 + C;
+        long v3 = (long)A * x2 + (long)B * y1 + C;
+        long v4 = (long)A * x2 + (long)B * y2 + C;
+        
+        // 0이 아닌 값들이 모두 같은 부호인지 확인
+        boolean allPositive = true;
+        boolean allNegative = true;
+        
+        // 각 꼭짓점 값을 검사
+        if (v1 > 0 || (v1 == 0 && (v2 > 0 || v3 > 0 || v4 > 0))) allNegative = false;
+        if (v1 < 0 || (v1 == 0 && (v2 < 0 || v3 < 0 || v4 < 0))) allPositive = false;
+        
+        if (v2 > 0 || (v2 == 0 && (v1 > 0 || v3 > 0 || v4 > 0))) allNegative = false;
+        if (v2 < 0 || (v2 == 0 && (v1 < 0 || v3 < 0 || v4 < 0))) allPositive = false;
+        
+        if (v3 > 0 || (v3 == 0 && (v1 > 0 || v2 > 0 || v4 > 0))) allNegative = false;
+        if (v3 < 0 || (v3 == 0 && (v1 < 0 || v2 < 0 || v4 < 0))) allPositive = false;
+        
+        if (v4 > 0 || (v4 == 0 && (v1 > 0 || v2 > 0 || v3 > 0))) allNegative = false;
+        if (v4 < 0 || (v4 == 0 && (v1 < 0 || v2 < 0 || v3 < 0))) allPositive = false;
+        
+        // 단 하나의 꼭짓점만 직선 위에 있고 나머지는 같은 쪽에 있는 경우도 Lucky
+        return (allPositive || allNegative) ? "Lucky" : "Poor";
     }
 }
