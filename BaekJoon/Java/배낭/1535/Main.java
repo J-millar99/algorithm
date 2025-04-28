@@ -1,66 +1,60 @@
 import java.io.*;
-import java.util.*;
+import java.util.Arrays;
 
 public class Main {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static int weight[];
+    static int value[];
     public static void main(String[] args) throws IOException {
-        int num = Integer.parseInt(br.readLine());
+        int n = Integer.parseInt(br.readLine());
         String[] in;
         
-        int[] cost = new int[num];
+        weight = new int[n];
         in = br.readLine().split(" ");
-        for (int i = 0; i < num; i++) 
-            cost[i] = Integer.parseInt(in[i]);
+        for (int i = 0; i < n; i++) 
+            weight[i] = Integer.parseInt(in[i]);
         
-        int[] gain = new int[num];
+        value = new int[n];
         in = br.readLine().split(" ");
-        for (int i = 0; i < gain.length; i++)
-            gain[i] = Integer.parseInt(in[i]);
+        for (int i = 0; i < n; i++)
+            value[i] = Integer.parseInt(in[i]);
         
-        solution(cost, gain, num);
+        int[][] memo = new int[n + 1][100];
+        for (int[] row : memo) {
+            Arrays.fill(row, -1);
+        }
+        System.out.println(solutionRecursive(n, 99, memo));
         br.close();
-    }    
-    
-    public static void solution(int[] cost, int[] gain, int size) {
-        int[][] arr = new int[size][2];
-
-        for (int i = 0; i < size; i++) {
-            arr[i][0] = cost[i];
-            arr[i][1] = gain[i];
-        }
-
-        Arrays.sort(arr, (a, b) -> {
-            double ratio1 = joyPerDamage(a[0], a[1]);
-            double ratio2 = joyPerDamage(b[0] ,b[1]);
-
-            if (ratio1 == ratio2)
-                return Integer.compare(a[0], b[0]);
-            return Double.compare(ratio2, ratio1);
-        });
-
-
-        int result = 0;
-        int i = 0;
-        while (i < size) {
-            int j = i;
-            int hp = 100;
-            int joy = 0;
-            while (j < size) {
-                int minus = arr[j][0];
-                int plus = arr[j][1];
-                if (hp - minus > 0) {
-                    joy += plus;
-                    hp -= minus;
-                }
-                j++;
-            }
-            i++;
-            result = Math.max(result, joy);
-        }
-        System.out.println(result);
     }
 
-    public static double joyPerDamage(int damage, int joy) {
-        return (double)joy / (double)damage;
+    public static int solutionDP(int n) {
+        int capacity = 99;
+        int dp[][] = new int[n + 1][capacity + 1];
+
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= capacity; j++) {
+                if (weight[i - 1] <= j)
+                    dp[i][j] = Math.max(value[i - 1] + dp[i - 1][j - weight[i - 1]], dp[i - 1][j]);
+                else
+                    dp[i][j] = dp[i - 1][j];
+            }
+        }
+        return dp[n][capacity];
+    }
+
+    public static int solutionRecursive(int n, int capacity, int[][] memo) {
+        if (n == 0 || capacity == 0) 
+            return 0;
+        
+        if (memo[n][capacity] != -1)
+            return memo[n][capacity];
+        
+        if (weight[n - 1] <= capacity) {
+            memo[n][capacity] = Math.max(value[n - 1] + solutionRecursive(n - 1, capacity - weight[n - 1], memo),
+            solutionRecursive(n - 1, capacity, memo));
+        }
+        else
+            memo[n][capacity] = solutionRecursive(n - 1, capacity, memo);
+        return memo[n][capacity];
     }
 }
