@@ -16,9 +16,7 @@ public class Main {
             cost[i] = Integer.parseInt(in[0]);
             weight[i] = Integer.parseInt(in[1]);
         }
-        int ret;
-        ret = solution(n, capacity);
-        System.out.println(ret);
+        System.out.println(solution(n, capacity));
         br.close();
     }
 
@@ -37,17 +35,17 @@ public class Main {
                     continue;
                 }
                 int prev = w - weight[i];
-                if (prev >= 0) {
-                    if (dp[prev][0] + cost[i] <= dp[w][0]) {
-                        dp[w][0] = dp[prev][0] + cost[i];
-                        dp[w][1] = Math.max(dp[w][1], dp[prev][1] + weight[i]);
+                if (prev >= 0 && dp[prev][0] + cost[i] < dp[w][0]) {
+                    dp[w][0] = dp[prev][0] + cost[i];
+                    dp[w][1] = dp[prev][1] + weight[i];
+                } else if (prev < 0) {
+                    if (cost[i] < dp[w][0]) {
+                        dp[w][0] = cost[i];
+                        dp[w][1] = weight[i];
                     }
                 }
             }
         }
-        for (int i = 0; i <= capacity; i++) {
-            System.out.println(i + ": " + "capacity: " + dp[i][1] +" cost: "+ dp[i][0]);
-        }
-        return 0;
+        return dp[capacity][0];
     }
 }
