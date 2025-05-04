@@ -6,38 +6,54 @@ public class Main {
     static StringBuilder sb = new StringBuilder();
     public static void main(String[] args) throws IOException {
         String in = br.readLine();
-
         int len = in.length();
-        char[] str = new char[len];
+        int s = 0, e = 0;
 
-        int cnt = 0;
-        boolean flag = false;
-        for (int i = 0; i < len; i++) {
-            char ch = in.charAt(i);
-            if (ch == '.') {
-                if (cnt != 0) {
-                    flag = true;
+        while (true) {
+            char ch = in.charAt(e);
+            if (ch == 'X')
+                e++;
+            else if (ch == '.') {
+                if (e - s == 2)
+                    addTwoB();
+                else if (s != e) {
+                    impossible();
                     break;
                 }
-                str[i] = '.';
-            } else {
-                cnt++;
-                if (cnt == 2) {
-                    str[i - 1] = str[i] = 'B';
-                    cnt = 0;
-                } else if (cnt == 4) {
-                    str[i - 3] = str[i - 2] = str[i - 1] = str[i] = 'A';
-                    cnt = 0;
-                }
+                sb.append('.');
+                e++;
+                s = e;
+            }
+            if (e - s == 4) {
+                addFourA();
+                s = e;
+            }
+            if (e == len) {
+                if (e - s == 2)
+                    addTwoB();
+                else if (e != s)
+                    impossible();
+                break;
             }
         }
-
-        if (flag == true)
-            sb.append(-1);
-        else
-            for (char c : str)
-                sb.append(c);
         System.out.print(sb);
         br.close();
+    }
+
+    public static void addFourA() {
+        for (int i = 0; i < 4; i++) {
+            sb.append('A');
+        }
+    }
+
+    public static void addTwoB() {
+        for (int i = 0; i < 2; i++) {
+            sb.append('B');
+        }
+    }
+
+    public static void impossible() {
+        sb.setLength(0);
+        sb.append(-1);
     }
 }
