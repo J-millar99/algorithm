@@ -1,41 +1,33 @@
 import java.io.*;
 
 public class Main {
-    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     public static void main(String[] args) throws IOException {
-        String in = br.readLine();
-        int k = 1, p = 1;
-        int cnt = 0;
-        char prev = in.charAt(0);
-        System.out.print(k);
-        for (int i = 1; i < in.length(); i++) {
-            char ch = in.charAt(i);
-            if (ch == 'K') {
-                if (prev == ch)
-                    k++;
-                else
-                    k = p;
-            } else if (ch == 'P') {
-                if (prev == ch)
-                    p++;
-                else
-                    p = k;
-            }
-            cnt = Math.max(cnt, p);
-            cnt = Math.max(cnt, k);
-            if (ch == 'K')
-                System.out.print(k);
-            else if (ch == 'P')
-                System.out.print(p);
-            if (p == k) {
-                if (ch == 'K')
-                    k--;
-                else if (ch == 'P')
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String input = br.readLine();
+        
+        int k = 0;
+        int p = 0;
+        
+        for (int i = 0; i < input.length(); i++) {
+            char c = input.charAt(i);
+            
+            if (c == 'K') {
+                // K가 나오면 P를 외치는 개구리가 있으면 하나 줄이고, 아니면 K 개구리 추가
+                if (p > 0) {
                     p--;
+                }
+                k++;
+            } else { // c == 'P'
+                // P가 나오면 K를 외치는 개구리가 있으면 하나 줄이고, 아니면 P 개구리 추가
+                if (k > 0) {
+                    k--;
+                }
+                p++;
             }
-            prev = ch;
         }
-        System.out.println(cnt);
+        
+        // 최종적으로 남아있는 개구리의 총 수가 답
+        System.out.println(k + p);
         br.close();
     }
 }
