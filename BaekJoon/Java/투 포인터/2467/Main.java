@@ -15,25 +15,34 @@ public class Main {
 
     public static void solution(int[] arr, int n) {
         int left = 0;
-        int right = n - 1;
-        int minSum = Math.abs(arr[left] + arr[right]);
-        int ret1 = left;
-        int ret2 = right;
-        while (left < right) {
-            int min = arr[left] + arr[right];
-            if (Math.abs(min) < minSum) {
-                minSum = Math.abs(min);
-                ret1 = left;
-                ret2 = right;
-                if (min == 0)
-                    break;
-            }
+        int right = 0;
 
-            if (min < 0) // 값이 음수이면 더 작은 음수를 만듦
-                left++;
-            else // 값이 양수면 더 작은 양수를 만듦
-                right--;
+        int ans = Integer.MAX_VALUE;
+        for (int i = 0; i < n - 1; i++) {
+            int curr = arr[i];
+            int s = i + 1;
+            int e = n - 1;
+
+            while (s <= e) {
+                int mid = (s + e) / 2;
+                int temp = curr + arr[mid];
+
+                if (Math.abs(temp) < ans) {
+                    ans = Math.abs(temp);
+                    left = i;
+                    right = mid;
+
+                    if (temp == 0)
+                        break;
+                }
+
+                if (temp < 0)
+                    s = mid + 1;
+                else
+                    e = mid - 1;
+            }
         }
-        System.out.println(arr[ret1] + " " + arr[ret2]);
+
+        System.out.println(arr[left] + " " + arr[right]);
     }
 }
