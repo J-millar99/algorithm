@@ -1,0 +1,7 @@
+{
+    "java.project.sourcePaths": [
+        ".",
+        "BaekJoon/Java"
+    ],
+    "java.debug.settings.console": "integratedTerminal",
+}
