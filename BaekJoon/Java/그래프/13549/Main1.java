@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class Main {
+public class Main1 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static int LIMIT = 200001;
     public static void main(String[] args) throws IOException {
