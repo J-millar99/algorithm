@@ -3,75 +3,72 @@ import java.util.*;
 
 public class Main {
     static Deque<Integer> dq = new ArrayDeque<>();
+    static int answer = 0;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String[] input;
 
-        input = br.readLine().split(" ");
-        int n = Integer.parseInt(input[0]);
-        int m = Integer.parseInt(input[1]);
+        String[] in = br.readLine().split(" ");
+        int n = Integer.parseInt(in[0]);
+        int m = Integer.parseInt(in[1]);
 
-        for (int i = 1; i <= n; i++)
-            dq.add(i);
-
-        input = br.readLine().split(" ");
+        in = br.readLine().split(" ");
         int[] arr = new int[m];
 
-        for (int i = 0; i < m; i++)
-            arr[i] = Integer.parseInt(input[i]);
+        for (int i = 0; i < m; i++) 
+            arr[i] = Integer.parseInt(in[i]);
         
-        int total = 0;
-        for (int i : arr) {
-            int rcost = rotateRight(i);
-            int lcost = rotateLeft(i);
-            int min = Math.min(rcost, lcost);
-            total += min;
-            if (min == rcost)
-                removeRight(i);
-            else
-                removeLeft(i);
+        
+        for (int i = 0; i < n; i++) 
+            dq.add(i + 1);
+        
+        for (int e : arr) {
+            minRotateCount(e);
+            dq.poll();
         }
-        System.out.println(total);
+
+        System.out.println(answer);
         br.close();
     }
 
-    public static int rotateRight(int find) {
-        Deque<Integer> copied = new ArrayDeque<>(dq);
-        int count = 0;
-        int temp = copied.pollFirst();
-        while (temp != find) {
-            copied.addLast(temp);
-            temp = copied.pollFirst();
-            ++count;
-        }
-        return count;
+    public static void rotateRight(Deque<Integer> dq) {
+        dq.addFirst(dq.pollLast());
     }
 
-    public static int rotateLeft(int find) {
-        Deque<Integer> copied = new ArrayDeque<>(dq);
-        int count = 0;
-        int temp = copied.pollLast();
-        while (temp != find) {
-            copied.addFirst(temp);
-            temp = copied.pollLast();
-            ++count;
-        }
-        return count + 1;
+    public static void rotateLeft(Deque<Integer> dq) {
+        dq.addLast(dq.pollFirst());
     }
 
-    public static void removeLeft(int find) {
-        int temp = dq.pollLast();
-        while (temp != find) {
-            dq.addFirst(temp);
-            temp = dq.pollLast();
-        }
-    }
+    public static void minRotateCount(int e) {
+        if (dq.peek() == e)
+            return;
 
-    public static void removeRight(int find) {
-        int temp = dq.pollFirst();
-        while (temp != find) {
-            dq.addLast(temp);
-            temp = dq.pollFirst();
+        Deque<Integer> ldq = new ArrayDeque<>(dq);
+        Deque<Integer> rdq = new ArrayDeque<>(dq);
+
+        int lcnt = 0, rcnt = 0;
+
+        while (ldq.peek() != e) {
+            rotateLeft(ldq);
+            lcnt++;
+        }
+
+        while (rdq.peek() != e) {
+            rotateRight(rdq);
+            rcnt++;
+        }
+
+        if (lcnt > rcnt) {
+            answer += rcnt;
+            while (rcnt != 0) {
+                rotateRight(dq);
+                rcnt--;
+            }
+        } else {
+            answer += lcnt;
+            while (lcnt != 0) {
+                rotateLeft(dq);
+                lcnt--;
+            }
         }
     }
 }
