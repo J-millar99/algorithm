@@ -1,41 +1,49 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayDeque;
+import java.util.Queue;
 
 public class Main {
-    static boolean[] visit = new boolean[100001];
-    static Queue<Pair> q = new ArrayDeque<>();
-
-    static class Pair {
-        int location, depth;
-        Pair(int location, int depth) {
-            this.location = location;
-            this.depth = depth;
-        }
-    }
-
-    public static void main(String[] args) throws IOException{
+    static final int LIMIT = 100001;
+    public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String[] strs = br.readLine().split(" ");
-        int n = Integer.parseInt(strs[0]); int k = Integer.parseInt(strs[1]);
-        System.out.println(hideAndSeek(n, k));
-        br.close();
-    }
+        String[] in = br.readLine().split(" ");
+        
+        int n = Integer.parseInt(in[0]);
+        int k = Integer.parseInt(in[1]);
+        
+        Queue<int[]> q = new ArrayDeque<>();
+        boolean[] visit = new boolean[LIMIT];
 
-    public static int hideAndSeek(int n, int k) {
-        Pair pair = new Pair(n, 0);
-        q.add(pair); // 처음 위치
+        q.add(new int[]{n, 0});
+        visit[n] = true;
 
-        while (!q.isEmpty()) {
-            pair = q.poll();
-            if (pair.location < 0 || pair.location > 100000 || visit[pair.location] == true)
-                continue;
-            visit[pair.location] = true;
-            if (pair.location == k)
-                return pair.depth;
-            q.add(new Pair(pair.location + 1, pair.depth + 1));
-            q.add(new Pair(pair.location - 1, pair.depth + 1));
-            q.add(new Pair(pair.location * 2, pair.depth + 1));
+        int answer = 0;
+        while(!q.isEmpty()) {
+            int[] pos = q.poll();
+            int loc = pos[0];
+            int time = pos[1];
+
+            if (loc == k) {
+                answer = time;
+                break;
+            }
+            
+            if (loc * 2 < LIMIT && visit[loc * 2] == false) {
+                q.add(new int[]{loc * 2, time + 1});
+                visit[loc * 2] = true;
+            }
+            if (loc + 1 < LIMIT && visit[loc + 1] == false) {
+                q.add(new int[]{loc + 1, time + 1});
+                visit[loc + 1] = true;
+            }
+            if (loc - 1 >= 0 && visit[loc - 1] == false) {
+                q.add(new int[]{loc - 1, time + 1});
+                visit[loc - 1] = true;
+            }
         }
-        return 0;
+        System.out.println(answer);
+        br.close();
     }
 }
