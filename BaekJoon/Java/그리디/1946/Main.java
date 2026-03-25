@@ -1,32 +1,52 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
 
 public class Main {
-    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    static StringBuilder sb = new StringBuilder();
+    static class Person implements Comparable<Person> {
+        int a, b;
+
+        Person(int a, int b) {
+            this.a = a;
+            this.b = b;
+        }
+
+        @Override
+        public int compareTo(Person o) {
+            if (this.a != o.a)
+                return this.a - o.a;
+            return this.b - o.b;
+        }
+    }
+
     public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
         int tries = Integer.parseInt(br.readLine());
         for (int i = 0; i < tries; i++) {
-            int num = Integer.parseInt(br.readLine());
-            int[][] arr = new int[num][2];
-            for (int j = 0; j < num; j++) {
+            int n = Integer.parseInt(br.readLine());
+            Person[] arr = new Person[n];
+            for (int j = 0; j < n; j++) {
                 String[] in = br.readLine().split(" ");
-                arr[j][0] = Integer.parseInt(in[0]);
-                arr[j][1] = Integer.parseInt(in[1]);
+
+                int a, b;
+                a = Integer.parseInt(in[0]);
+                b = Integer.parseInt(in[1]);
+                arr[j] = new Person(a, b);
             }
-            Arrays.sort(arr, Comparator.comparing((int[] e) -> e[0]));
-            // 이미 서류 성적은 정렬
+            Arrays.sort(arr);
+
+            int pivot = arr[0].b;
             int count = 1;
-            int rank = arr[0][1];
-            for (int id = 1; id < num; id++) {
-                if (arr[id][1] < rank) {
+            for (int j = 1; j < n; j++) {
+                if (arr[j].b < pivot) {
+                    pivot = arr[j].b;
                     count++;
-                    rank = arr[id][1];
-                }              
+                }
             }
-            sb.append(count).append("\n");
+            System.out.println(count);
         }
-        System.out.print(sb);
         br.close();
     }
 }
