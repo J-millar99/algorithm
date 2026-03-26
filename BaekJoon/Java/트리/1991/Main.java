@@ -1,71 +1,56 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class Main {
-    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    static StringBuilder sb = new StringBuilder();
-    static Tree node;
     static class Tree {
         char data;
         Tree left;
         Tree right;
-        Tree (char data) {
+        public Tree(char data) {
             this.data = data;
-            left = null;
-            right = null;
+            this.left = null;
+            this.right = null;
         }
     }
-    
+    static StringBuilder sb = new StringBuilder();
+    static Tree node;
     public static void main(String[] args) throws IOException {
-        int num = Integer.parseInt(br.readLine());
-
-        Tree head = createRootNode();
-        for (int i = 0; i < num - 1; i++) {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int n = Integer.parseInt(br.readLine());
+        Tree rootNode = new Tree('A');
+    
+        for (int i = 0; i < n; i++) {
             String[] in = br.readLine().split(" ");
-            char parent = in[0].charAt(0);
-            char lc = in[1].charAt(0);
-            char rc = in[2].charAt(0);
+            char data, left, right;
+            
+            data = in[0].charAt(0);
+            left = in[1].charAt(0);
+            right = in[2].charAt(0);
 
-            node = null;                // 탐색 노드를 널 포인터로 시작
-            searchNode(head, parent);   // 찾았다면 해당 노드가 node의 참조가 되고 아니라면 널
-
-            if (node == null)           // 찾지 못했다면 해당 노드를 생성
-                node = new Tree(parent);
-            if (lc != '.')
-                node.left = new Tree(lc);
-            if (rc != '.')
-                node.right = new Tree(rc);
+            searchNode(rootNode, data);
+            if (left != '.') {
+                node.left = new Tree(left);
+            }
+            if (right != '.')
+                node.right = new Tree(right);
         }
 
-        preorder(head);
+        preorder(rootNode);
         sb.append("\n");
-        inorder(head);
+        inorder(rootNode);
         sb.append("\n");
-        postorder(head);
+        postorder(rootNode);
         sb.append("\n");
+
         System.out.print(sb);
         br.close();
     }
-    
-    public static Tree createRootNode() throws IOException {
-        String[] in = br.readLine().split(" ");
-        char parent = in[0].charAt(0);
-        char lc = in[1].charAt(0);
-        char rc = in[2].charAt(0);
-    
-        Tree root = new Tree(parent);
-        if (lc != '.')
-            root.left = new Tree(lc);
-        if (rc != '.')
-            root.right = new Tree(rc);
-
-        return root;
-    }
 
     public static void searchNode(Tree head, char data) {
-        if (head.data == data) {
+        if (data == head.data) {
             node = head;
-            return;
+            return ;
         }
         if (head.left != null)
             searchNode(head.left, data);
@@ -73,27 +58,27 @@ public class Main {
             searchNode(head.right, data);
     }
 
-    public static void preorder(Tree head) {
-        if (head == null)
+    public static void preorder(Tree rootNode) {
+        if (rootNode == null)
             return;
-        sb.append(head.data);
-        preorder(head.left);
-        preorder(head.right);
+        sb.append(rootNode.data);
+        preorder(rootNode.left);
+        preorder(rootNode.right);
     }
 
-    public static void inorder(Tree head) {
-        if (head == null)
+    public static void inorder(Tree rootNode) {
+        if (rootNode == null)
             return;
-        inorder(head.left);
-        sb.append(head.data);
-        inorder(head.right);
+        inorder(rootNode.left);
+        sb.append(rootNode.data);
+        inorder(rootNode.right);
     }
-    
-    public static void postorder(Tree head) {
-        if (head == null)
+
+    public static void postorder(Tree rootNode) {
+        if (rootNode == null)
             return;
-        postorder(head.left);
-        postorder(head.right);
-        sb.append(head.data);
+        postorder(rootNode.left);
+        postorder(rootNode.right);
+        sb.append(rootNode.data);
     }
 }
