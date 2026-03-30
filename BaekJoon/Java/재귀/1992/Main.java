@@ -1,54 +1,50 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class Main {
-    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static StringBuilder sb = new StringBuilder();
     public static void main(String[] args) throws IOException {
-        int size = Integer.parseInt(br.readLine());
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int n = Integer.parseInt(br.readLine());
 
-        char[][] graph = new char[size][size];
-        for (int i = 0; i < size; i++) {
+        char[][] field = new char[n][n];
+        for (int i = 0; i < n; i++) {
             String in = br.readLine();
-            for (int j = 0; j < size; j++) {
-                graph[i][j] = in.charAt(j);
+            for (int j = 0; j < n; j++) {
+                field[i][j] = in.charAt(j);
             }
         }
-
-        recursive(graph, 0, 0, size);
-        System.out.println(sb);
         br.close();
+        divide(field, 0, 0, n);
+        System.out.println(sb);
+        
     }
 
-    public static void recursive(char[][] graph, int x, int y, int size) {
-        if (size == 0) { // base condition
-            sb.append(")");
-            return ;
+    public static void divide(char[][] field, int x, int y, int size) {
+        if (checkField(field, x, y, size))
+            return;
+        else {
+            size /= 2;
+            divide(field, x, y, size);
+            divide(field, x, y + size, size);
+            divide(field, x + size, y, size);
+            divide(field, x + size, y + size, size);
+            sb.append(')');
         }
-        if (checkPaper(graph, x, y, size) == true) {
-            if (graph[x][y] == '0')
-                sb.append("0");
-            else if (graph[x][y] == '1')
-                sb.append("1");
-            return ;
-        }
-        sb.append("(");
-        size = size / 2;
-        recursive(graph, x, y, size);               // 좌 상단
-        recursive(graph, x, y + size, size);        // 우 상단
-        recursive(graph, x + size, y, size);        // 좌 하단
-        recursive(graph, x + size, y + size, size); // 우 하단
-        sb.append(")");
     }
 
-    // x, y 색종이의 시작 좌표, size는 종이의 크기
-    public static boolean checkPaper(char[][] graph, int x, int y, int size) {
-        char flag = graph[x][y];
+    public static boolean checkField(char[][] field, int x, int y, int size) {
+        char pivot = field[x][y];
         for (int i = x; i < x + size; i++) {
             for (int j = y; j < y + size; j++) {
-                if (graph[i][j] != flag)
+                if (field[i][j] != pivot) {
+                    sb.append('(');
                     return false;
+                }
             }
         }
+        sb.append(pivot);
         return true;
     }
 }
