@@ -1,94 +1,85 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.PriorityQueue;
 
 public class Main {
-    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    static StringBuffer sb = new StringBuffer();
-    // 그래프의 간선 정보를 저장하는 내부 클래스
-    private static class Edge implements Comparable<Edge> {
-        int destination;
+    static class Edge implements Comparable<Edge>{
+        int dest;
         int weight;
-
-        Edge(int destination, int weight) {
-            this.destination = destination;
+        Edge(int dest, int weight) {
+            this.dest = dest;
             this.weight = weight;
         }
 
         @Override
-        public int compareTo(Edge other) {
-            return Integer.compare(this.weight, other.weight);
+        public int compareTo(Edge o) {
+            return Integer.compare(this.weight, o.weight);
         }
     }
 
-    public static int[] dijkstra(List<List<Edge>> graph, int start) {
-        int vertices = graph.size();
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String in[] = br.readLine().split(" ");
 
-        // 최단 거리를 저장할 배열 (무한대로 초기화)
-        int[] distances = new int[vertices];
+        int V = Integer.parseInt(in[0]);
+        int E = Integer.parseInt(in[1]);
+
+        int start = Integer.parseInt(br.readLine()) - 1;
+
+        List<List<Edge>> graph = new ArrayList<>();
+        for (int i = 0; i < V; i++) 
+            graph.add(new ArrayList<>());
+        
+        for (int i = 0; i < E; i++) {
+            in = br.readLine().split(" ");
+            int u = Integer.parseInt(in[0]) - 1;
+            int v = Integer.parseInt(in[1]) - 1;
+            int w = Integer.parseInt(in[2]);
+            Edge node = new Edge(v, w);
+            graph.get(u).add(node);
+        }
+        br.close();
+
+        int[] distances = new int[V];
         Arrays.fill(distances, Integer.MAX_VALUE);
+        dijkstra(graph, start, distances);
+        StringBuilder sb = new StringBuilder();
+        for (int distance : distances) {
+            if (distance == Integer.MAX_VALUE)
+                sb.append("INF");
+            else
+                sb.append(distance);
+            sb.append("\n");
+        }
+        System.out.print(sb);
+    }
+
+    public static void dijkstra(List<List<Edge>> graph, int start, int[] distances) {
         distances[start] = 0;
-
         PriorityQueue<Edge> pq = new PriorityQueue<>();
-        pq.offer(new Edge(start, 0));
-
-
-        // 최단 경로 추적을 위한 이전 노드 배열
-        int[] previous = new int[vertices];
-        Arrays.fill(previous, -1);
+        pq.add(new Edge(start, 0));
 
         while (!pq.isEmpty()) {
-            Edge currentEdge = pq.poll();
-            int currentVertex = currentEdge.destination;
-            int currentDistance = currentEdge.weight;
+            Edge edge = pq.poll();
+            int currentVertex = edge.dest; // 현재 노드
+            int currentDistance = edge.weight; // 현재 거리
 
-            // 이미 더 짧은 경로를 찾은 경우 스킵
+            // 갱신 불가
             if (currentDistance > distances[currentVertex])
                 continue;
 
-            // 현재 정점의 모든 인접 정점 탐색
             for (Edge neighbor : graph.get(currentVertex)) {
-                int newDistance = currentDistance + neighbor.weight;
+                int newDistance = neighbor.weight + currentDistance;
 
-                // 더 짧은 경로 발견 시 업데이트
-                if (newDistance < distances[neighbor.destination]) {
-                    distances[neighbor.destination] = newDistance;
-                    previous[neighbor.destination] = currentVertex;
-                    pq.offer(new Edge(neighbor.destination, newDistance));
+                if (newDistance < distances[neighbor.dest]) {
+                    distances[neighbor.dest] = newDistance;
+                    pq.add(new Edge(neighbor.dest, newDistance));
                 }
             }
         }
-        return distances;
-    }
-    
-    public static void main(String[] args) throws IOException {
-        String[] in = br.readLine().split(" ");
-        int n = Integer.parseInt(in[0]);
-        int m = Integer.parseInt(in[1]);
-
-        int startNode = Integer.parseInt(br.readLine());
-        List<List<Edge>> graph = new ArrayList<>();
-        for (int i = 0; i < n; i++) {
-            graph.add(new ArrayList<>());
-        }
-
-        for (int i = 0; i < m; i++) {
-            in = br.readLine().split(" ");
-            int start, end, weight;
-            start = Integer.parseInt(in[0]);
-            end = Integer.parseInt(in[1]);
-            weight = Integer.parseInt(in[2]);
-
-            graph.get(start - 1).add(new Edge(end - 1, weight));
-        }
-
-        int[] distances = dijkstra(graph, startNode - 1);
-        for (int i : distances) {
-            if (i == Integer.MAX_VALUE)
-                sb.append("INF\n");
-            else
-                sb.append(i).append("\n");
-        }
-        System.out.print(sb);
-        br.close();
     }
 }
