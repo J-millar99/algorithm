@@ -15,53 +15,50 @@ public class Main {
         return parent[x];
     }
 
-    static boolean union(int a, int b){
+    static boolean union(int a, int b) {
         int ra = find(a); int rb = find(b);
-        if(ra == rb)    return false;
+
+        if (ra == rb)   return false;
 
         if (rank[ra] < rank[rb]) {
-            int temp = ra;
+            int tmp = ra;
             ra = rb;
-            rb = temp;
+            rb = tmp;
         }
 
         parent[rb] = ra;
-
-        if(rank[ra] == rank[rb])    rank[ra]++;
-
+        if (rank[ra] == rank[rb]) rank[ra]++;
         return true;
     }
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String[] in = br.readLine().split(" ");
 
-        int V, E;
+        int n = Integer.parseInt(br.readLine());
+        int m = Integer.parseInt(br.readLine());
 
-        V = Integer.parseInt(in[0]);
-        E = Integer.parseInt(in[1]);
+        parent = new int[n];
+        for (int i = 0; i < n; i++) parent[i] = i;
+        rank = new int[n];
 
-        parent = new int[V];
-        for (int i = 0; i < V; i++) parent[i] = i;
-        rank = new int[V];
+        int[][] edges = new int[m][3];
+        List<int[]> mst = new ArrayList<>();
+        for (int i = 0; i < m; i++) {
+            String[] in = br.readLine().split(" ");
 
-        int[][] edges = new int[E][3];
-        for (int i = 0; i < E; i++) {
-            in = br.readLine().split(" ");
-
-            edges[i][0]  = Integer.parseInt(in[0]) - 1;
-            edges[i][1]  = Integer.parseInt(in[1]) - 1;
-            edges[i][2]  = Integer.parseInt(in[2]);
+            edges[i][0] = Integer.parseInt(in[0]) - 1;
+            edges[i][1] = Integer.parseInt(in[1]) - 1;
+            edges[i][2] = Integer.parseInt(in[2]);
         }
         br.close();
         Arrays.sort(edges, Comparator.comparingInt(e -> e[2]));
 
-        List<int[]> mst = new ArrayList<>();
         int totalCost = 0;
         for (int[] edge : edges) {
             if (union(edge[0], edge[1])) {
                 mst.add(edge);
                 totalCost += edge[2];
-                if (mst.size() == V - 1) break;
+                if (mst.size() == n - 1) break;
             }
         }
 
