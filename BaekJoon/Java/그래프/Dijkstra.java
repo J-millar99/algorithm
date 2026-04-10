@@ -34,7 +34,6 @@ public class Dijkstra {
         PriorityQueue<Edge> pq = new PriorityQueue<>();
         pq.offer(new Edge(start, 0));
 
-
         // 최단 경로 추적을 위한 이전 노드 배열
         int[] previous = new int[vertices];
         Arrays.fill(previous, -1);
