@@ -61,7 +61,7 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        int n;
+        int n, m;
 
         String in = br.readLine();
         n = Integer.parseInt(in);
